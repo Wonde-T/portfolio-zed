@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* next-themes drives the "dark" class on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: oklch(99% 0.002 250);
+  --foreground: oklch(21% 0.02 265);
+  --muted: oklch(96.5% 0.005 250);
+  --muted-foreground: oklch(50% 0.02 265);
+  --border: oklch(90% 0.01 255);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(21% 0.02 265);
+  --primary: oklch(54% 0.19 277);
+  --primary-foreground: oklch(98% 0.01 277);
+  --accent: oklch(95% 0.03 277);
+  --accent-foreground: oklch(40% 0.16 277);
+  --ring: oklch(54% 0.19 277);
+}
+
+.dark {
+  --background: oklch(17% 0.015 265);
+  --foreground: oklch(96% 0.005 260);
+  --muted: oklch(24% 0.02 265);
+  --muted-foreground: oklch(70% 0.02 262);
+  --border: oklch(30% 0.02 265);
+  --card: oklch(21% 0.018 265);
+  --card-foreground: oklch(96% 0.005 260);
+  --primary: oklch(70% 0.16 280);
+  --primary-foreground: oklch(18% 0.03 280);
+  --accent: oklch(30% 0.05 280);
+  --accent-foreground: oklch(88% 0.06 280);
+  --ring: oklch(70% 0.16 280);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-ring: var(--ring);
+
+  --radius-card: 1rem;
+
+  --animate-fade-in: fade-in 0.4s ease-out both;
+  --animate-fade-out: fade-out 0.2s ease-in both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+  }
+
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    /* Anchor targets must clear the sticky header. */
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Smooth cross-fade when next-themes swaps the palette. */
+  html,
+  body {
+    transition:
+      background-color 300ms ease,
+      color 300ms ease;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklch, var(--primary) 25%, transparent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
