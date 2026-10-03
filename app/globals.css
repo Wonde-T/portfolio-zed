@@ -17,6 +17,8 @@
   --accent: oklch(95% 0.03 277);
   --accent-foreground: oklch(40% 0.16 277);
   --ring: oklch(54% 0.19 277);
+  --destructive: oklch(55% 0.21 27);
+  --destructive-foreground: oklch(98% 0.01 27);
 }
 
 .dark {
@@ -32,6 +34,8 @@
   --accent: oklch(30% 0.05 280);
   --accent-foreground: oklch(88% 0.06 280);
   --ring: oklch(70% 0.16 280);
+  --destructive: oklch(70% 0.18 25);
+  --destructive-foreground: oklch(18% 0.04 25);
 }
 
 @theme inline {
@@ -50,6 +54,8 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
 
   --radius-card: 1rem;
 
