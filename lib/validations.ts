@@ -25,6 +25,19 @@ const optionalUrl = z.union([
 ]);
 
 /**
+ * Covers always come from Cloudinary, and `next.config.ts` only allows that host
+ * in `images.remotePatterns` — rejecting anything else here turns a broken
+ * `<Image>` render into a field error the owner can actually fix.
+ */
+const cloudinaryImageUrl = z
+  .url("Enter the Cloudinary URL of the cover image.")
+  .max(1024)
+  .refine(
+    (value) => new URL(value).hostname === "res.cloudinary.com",
+    "Cover images must be hosted on Cloudinary (res.cloudinary.com).",
+  );
+
+/**
  * `is_visible` can only be false if its parent section is visible too, but the
  * database has no such constraint — the public page simply hides the whole
  * block, so a hidden project inside a hidden section is harmless.
@@ -47,9 +60,7 @@ export const projectSchema = z.object({
     .string()
     .trim()
     .min(1, "The case study body cannot be empty."),
-  cloudinaryImageUrl: z
-    .url("Enter the Cloudinary URL of the cover image.")
-    .max(1024),
+  cloudinaryImageUrl,
   githubUrl: optionalUrl,
   liveUrl: optionalUrl,
   isVisible: z.boolean(),

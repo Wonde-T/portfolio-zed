@@ -51,6 +51,12 @@ services:
     build:
       context: .
       target: runner
+      args:
+        # Inlined into the bundles at build time, so they cannot come from the
+        # runtime `environment` block below.
+        NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: ${NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME:-}
+        NEXT_PUBLIC_CLOUDINARY_API_KEY: ${NEXT_PUBLIC_CLOUDINARY_API_KEY:-}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
     restart: unless-stopped
     environment:
       NODE_ENV: production

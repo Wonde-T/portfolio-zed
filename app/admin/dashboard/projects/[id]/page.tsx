@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { updateProjectAction } from "@/app/admin/dashboard/actions";
 import { ProjectForm } from "@/components/admin/project-form";
+import { isCloudinaryConfigured } from "@/lib/cloudinary";
 import { getProject, listProjectCategories } from "@/lib/queries/projects";
 
 export const metadata: Metadata = {
@@ -40,6 +41,7 @@ export default async function EditProjectPage(
           action={updateProjectAction}
           categories={categories}
           submitLabel="Save project"
+          cloudinaryConfigured={isCloudinaryConfigured()}
           project={{
             id: project.id,
             title: project.title,

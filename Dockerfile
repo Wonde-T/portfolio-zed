@@ -14,6 +14,15 @@ RUN npm ci
 # ---- builder -------------------------------------------------------------
 FROM base AS builder
 ENV NEXT_TELEMETRY_DISABLED=1
+# NEXT_PUBLIC_* values are inlined into the bundles by `next build`, so they have
+# to exist *here* — the runtime environment of the runner cannot change them.
+# docker-compose passes them from your .env.
+ARG NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=""
+ARG NEXT_PUBLIC_CLOUDINARY_API_KEY=""
+ARG NEXT_PUBLIC_SITE_URL="http://localhost:3000"
+ENV NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=$NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME \
+    NEXT_PUBLIC_CLOUDINARY_API_KEY=$NEXT_PUBLIC_CLOUDINARY_API_KEY \
+    NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # The generated Prisma client lives outside node_modules, so it must exist

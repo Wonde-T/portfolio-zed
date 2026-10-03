@@ -77,9 +77,13 @@ The dashboard lives at `/admin/login`. Seeded credentials come from
 
 ```
 app/                    Routes (App Router)
+  (site)/               Public pages: landing page + project/[id] case studies
   admin/                Login + dashboard
-  projects/[id]/        Public project case study
-components/             UI components (providers, sections, admin widgets)
+  api/auth/             Auth.js route handlers
+  api/cloudinary/sign/  Upload signature endpoint (admin only)
+components/
+  site/                 Public UI: header, hero, gallery, contact
+  admin/                Dashboard UI: forms, tables, upload widget
 lib/                    Site config, db client, queries, validations
 prisma/                 Schema, migrations, seed
 ```
@@ -89,6 +93,19 @@ prisma/                 Schema, migrations, seed
 Personal details that never change per-deploy live in `lib/site-config.ts`.
 Everything else — projects, skills, section titles and visibility — lives in the database and is
 edited from `/admin/dashboard`.
+
+## Media
+
+Project covers are uploaded from the dashboard straight to Cloudinary:
+
+- The browser asks `/api/cloudinary/sign` for a signature, then posts the file to Cloudinary
+  itself, so the app container never handles image bytes and only the resulting delivery URL is
+  stored. `CLOUDINARY_API_SECRET` is read on the server and never reaches the client.
+- Cover URLs are validated against `res.cloudinary.com`, which is also the only host allowed in
+  `next.config.ts` `images.remotePatterns`.
+- `NEXT_PUBLIC_CLOUDINARY_*` values are inlined into the bundles by `next build`, so they must be
+  present **at build time**. Compose passes them from `.env` as build args; with no credentials at
+  all the dashboard falls back to a plain URL input instead of a widget that cannot sign anything.
 
 ## Database notes
 

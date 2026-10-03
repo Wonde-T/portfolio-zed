@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { createProjectAction } from "@/app/admin/dashboard/actions";
 import { ProjectForm } from "@/components/admin/project-form";
+import { isCloudinaryConfigured } from "@/lib/cloudinary";
 import { listProjectCategories } from "@/lib/queries/projects";
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default async function NewProjectPage() {
           action={createProjectAction}
           categories={categories}
           submitLabel="Create project"
+          cloudinaryConfigured={isCloudinaryConfigured()}
         />
       </div>
 

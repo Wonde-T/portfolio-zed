@@ -8,6 +8,7 @@ import {
   TextField,
 } from "@/components/admin/fields";
 import { FormMessage } from "@/components/admin/form-message";
+import { ImageUploadField } from "@/components/admin/image-upload-field";
 import { SubmitButton } from "@/components/admin/submit-button";
 import { idleState, type ActionState } from "@/lib/action-state";
 
@@ -32,6 +33,8 @@ type ProjectFormProps = {
   project?: ProjectFormValues | undefined;
   categories: string[];
   submitLabel: string;
+  /** False falls the cover field back to a plain Cloudinary URL input. */
+  cloudinaryConfigured: boolean;
 };
 
 export function ProjectForm({
@@ -39,6 +42,7 @@ export function ProjectForm({
   project,
   categories,
   submitLabel,
+  cloudinaryConfigured,
 }: ProjectFormProps) {
   const [state, formAction] = useActionState(action, idleState);
   const errors = state.fieldErrors;
@@ -88,15 +92,11 @@ export function ProjectForm({
         errors={errors.description}
       />
 
-      <TextField
-        name="cloudinaryImageUrl"
-        label="Cover image URL"
-        required
-        inputMode="url"
-        autoComplete="off"
+      <ImageUploadField
+        label="Cover image"
         defaultValue={project?.cloudinaryImageUrl}
-        placeholder="https://res.cloudinary.com/<cloud>/image/upload/<id>"
         errors={errors.cloudinaryImageUrl}
+        configured={cloudinaryConfigured}
         hint="Uploaded to Cloudinary; only the resulting URL is stored."
       />
 
