@@ -32,26 +32,31 @@ public site updates immediately without Redis.
    npx auth secret   # generates AUTH_SECRET
    ```
 
-2. Start MySQL:
+2. Choose where the app and database listen. If the host already uses 3306 or
+   3000, set `MYSQL_PORT` / `APP_PORT` in `.env` and update `DATABASE_URL` and
+   `NEXT_PUBLIC_SITE_URL` to match.
+
+3. Start everything:
 
    ```bash
-   docker compose up -d db
+   docker compose up --build
    ```
 
-3. Create the schema and seed the admin user:
+   Compose starts MySQL, waits for it to pass its healthcheck, runs
+   `prisma migrate deploy` plus the seed in a throwaway `migrate` service, and
+   only then starts the app.
 
-   ```bash
-   npm run db:deploy
-   npm run db:seed
-   ```
+### Running the app without Docker
 
-4. Run the dev server:
+```bash
+docker compose up -d db          # MySQL only
+npm run db:deploy                # apply migrations
+npm run db:seed                  # admin user + demo content
+npm run dev
+```
 
-   ```bash
-   npm run dev
-   ```
-
-   The site is at <http://localhost:3000>, the dashboard at <http://localhost:3000/admin/login>.
+The dashboard lives at `/admin/login`. Seeded credentials come from
+`ADMIN_EMAIL` / `ADMIN_PASSWORD` in `.env`.
 
 ## Scripts
 
@@ -84,3 +89,23 @@ prisma/                 Schema, migrations, seed
 Personal details that never change per-deploy live in `lib/site-config.ts`.
 Everything else — projects, skills, section titles and visibility — lives in the database and is
 edited from `/admin/dashboard`.
+
+## Database notes
+
+- Columns are `snake_case`; the Prisma models expose `camelCase` via `@map`.
+- Prisma 7 needs a driver adapter, so `lib/prisma-adapter.ts` builds the connection from
+  `DATABASE_URL`. It enables `allowPublicKeyRetrieval` because MySQL 8 defaults to
+  `caching_sha2_password` and the Docker network is unencrypted.
+- Use `127.0.0.1` rather than `localhost` in `DATABASE_URL`; on Windows `localhost` can resolve to
+  IPv6, which Docker does not publish.
+- `docker/mysql-init/01-grant.sql` runs once on an empty data directory and lets the dev user
+  create Prisma's shadow database. It only applies to a fresh volume.
+
+## Docker layout
+
+| Stage | Purpose |
+| --- | --- |
+| `deps` | `npm ci` from the lockfile |
+| `builder` | `prisma generate` + `next build` |
+| `runner` | production image, `output: "standalone"`, runs as a non-root user |
+| `migrate` | `prisma migrate deploy` + seed, then exits |

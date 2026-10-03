@@ -1,5 +1,8 @@
 // Prisma schema for the portfolio CMS.
 // Docs: https://pris.ly/d/prisma-schema
+//
+// Field names are camelCase in TypeScript and snake_case in MySQL (@map),
+// matching the documented data model.
 
 generator client {
   provider = "prisma-client"
@@ -8,4 +11,53 @@ generator client {
 
 datasource db {
   provider = "mysql"
+}
+
+/// Admin account. Single-owner CMS, so there is no role column.
+model User {
+  id           String   @id @default(uuid()) @db.Char(36)
+  email        String   @unique @db.VarChar(191)
+  passwordHash String   @map("password_hash") @db.VarChar(191)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("users")
+}
+
+/// Global visibility + title overrides for a landing page section.
+model SectionConfig {
+  id          String  @id @default(uuid()) @db.Char(36)
+  sectionName String  @unique @map("section_name") @db.VarChar(64)
+  isVisible   Boolean @default(true) @map("is_visible")
+  title       String? @db.VarChar(191)
+
+  @@map("section_configs")
+}
+
+/// Portfolio case study.
+model Project {
+  id                 String  @id @default(uuid()) @db.Char(36)
+  title              String  @db.VarChar(191)
+  description        String  @db.Text
+  contentMarkdown    String  @map("content_markdown") @db.Text
+  cloudinaryImageUrl String  @map("cloudinary_image_url") @db.VarChar(1024)
+  githubUrl          String? @map("github_url") @db.VarChar(1024)
+  liveUrl            String? @map("live_url") @db.VarChar(1024)
+  category           String  @db.VarChar(64)
+  isVisible          Boolean @default(true) @map("is_visible")
+  orderIndex         Int     @default(0) @map("order_index")
+
+  @@index([isVisible, orderIndex])
+  @@map("projects")
+}
+
+/// Technical proficiency.
+model Skill {
+  id        String  @id @default(uuid()) @db.Char(36)
+  name      String  @db.VarChar(191)
+  category  String  @db.VarChar(64)
+  isVisible Boolean @default(true) @map("is_visible")
+
+  @@unique([name, category])
+  @@index([isVisible])
+  @@map("skills")
 }
