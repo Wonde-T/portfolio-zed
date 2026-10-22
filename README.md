@@ -13,7 +13,7 @@ public site updates immediately without Redis.
 | Language | TypeScript (strict) |
 | Styling | Tailwind CSS v4 |
 | Animation | Framer Motion |
-| Database | MySQL 8 via Prisma 7 (`@prisma/adapter-mariadb` driver adapter) |
+| Database | PostgreSQL 17 via Prisma 7 (`@prisma/adapter-pg` driver adapter) |
 | Auth | Auth.js / NextAuth v5, credentials provider, JWT sessions |
 | Media | Cloudinary |
 | Infra | Docker + Docker Compose |
@@ -21,7 +21,7 @@ public site updates immediately without Redis.
 ## Requirements
 
 - Node.js 20.9+
-- Docker (for MySQL)
+- Docker (for PostgreSQL)
 
 ## Getting started
 
@@ -32,8 +32,8 @@ public site updates immediately without Redis.
    npx auth secret   # generates AUTH_SECRET
    ```
 
-2. Choose where the app and database listen. If the host already uses 3306 or
-   3000, set `MYSQL_PORT` / `APP_PORT` in `.env` and update `DATABASE_URL` and
+2. Choose where the app and database listen. If the host already uses 5432 or
+   3000, set `POSTGRES_PORT` / `APP_PORT` in `.env` and update `DATABASE_URL` and
    `NEXT_PUBLIC_SITE_URL` to match.
 
 3. Start everything:
@@ -42,14 +42,14 @@ public site updates immediately without Redis.
    docker compose up --build
    ```
 
-   Compose starts MySQL, waits for it to pass its healthcheck, runs
+   Compose starts PostgreSQL, waits for it to pass its healthcheck, runs
    `prisma migrate deploy` plus the seed in a throwaway `migrate` service, and
    only then starts the app.
 
 ### Running the app without Docker
 
 ```bash
-docker compose up -d db          # MySQL only
+docker compose up -d db          # PostgreSQL only
 npm run db:deploy                # apply migrations
 npm run db:seed                  # admin user + demo content
 npm run dev
@@ -76,21 +76,25 @@ The dashboard lives at `/admin/login`. Seeded credentials come from
 ## Project layout
 
 ```
-app/                    Routes (App Router)
-  (site)/               Public pages: landing page + project/[id] case studies
-  admin/                Login + dashboard
-  api/auth/             Auth.js route handlers
-  api/cloudinary/sign/  Upload signature endpoint (admin only)
-components/
-  site/                 Public UI: header, hero, gallery, contact
-  admin/                Dashboard UI: forms, tables, upload widget
-lib/                    Site config, db client, queries, validations
+src/
+  app/                  Routes (App Router)
+    (site)/             Public pages: landing page + project/[id] case studies
+    admin/              Login + dashboard
+    api/auth/           Auth.js route handlers
+    api/cloudinary/sign/ Upload signature endpoint (admin only)
+  components/
+    site/               Public UI: header, hero, gallery, contact
+    admin/              Dashboard UI: forms, tables, upload widget
+  lib/                  Site config, db client, queries, validations
+  auth.ts               Auth.js instance (credentials provider)
+  auth.config.ts        Provider-free auth config, shared with the proxy
+  proxy.ts              Optimistic session gate for /admin/dashboard
 prisma/                 Schema, migrations, seed
 ```
 
 ## Configuration
 
-Personal details that never change per-deploy live in `lib/site-config.ts`.
+Personal details that never change per-deploy live in `src/lib/site-config.ts`.
 Everything else — projects, skills, section titles and visibility — lives in the database and is
 edited from `/admin/dashboard`.
 
@@ -110,13 +114,13 @@ Project covers are uploaded from the dashboard straight to Cloudinary:
 ## Database notes
 
 - Columns are `snake_case`; the Prisma models expose `camelCase` via `@map`.
-- Prisma 7 needs a driver adapter, so `lib/prisma-adapter.ts` builds the connection from
-  `DATABASE_URL`. It enables `allowPublicKeyRetrieval` because MySQL 8 defaults to
-  `caching_sha2_password` and the Docker network is unencrypted.
+- Prisma 7 needs a driver adapter, so `src/lib/prisma-adapter.ts` builds the connection from
+  `DATABASE_URL` and passes it to `@prisma/adapter-pg`.
 - Use `127.0.0.1` rather than `localhost` in `DATABASE_URL`; on Windows `localhost` can resolve to
-  IPv6, which Docker does not publish.
-- `docker/mysql-init/01-grant.sql` runs once on an empty data directory and lets the dev user
-  create Prisma's shadow database. It only applies to a fresh volume.
+  IPv6, which Docker does not publish. If a native PostgreSQL install already owns port 5432, set
+  `POSTGRES_PORT` (and the port in `DATABASE_URL`) to a free port such as 5433.
+- The Compose database is a standard `postgres:17-alpine` container; the superuser it creates can
+  create the shadow database used by `prisma migrate dev`.
 
 ## Docker layout
 

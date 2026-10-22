@@ -1,14 +1,16 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
+import type { Route } from "next";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
 const ITEMS = [
-  { href: "/admin/dashboard", label: "Sections" },
-  { href: "/admin/dashboard/projects", label: "Projects" },
-  { href: "/admin/dashboard/skills", label: "Skills" },
+  { href: "/admin/dashboard" as Route, label: "Sections" },
+  { href: "/admin/dashboard/home" as Route, label: "Home" },
+  { href: "/admin/dashboard/projects" as Route, label: "Projects" },
+  { href: "/admin/dashboard/skills" as Route, label: "Skills" },
 ] as const;
 
 export function DashboardNav() {
@@ -16,9 +18,12 @@ export function DashboardNav() {
 
   return (
     <nav aria-label="Dashboard">
-      <ul className="-mb-px flex gap-1 overflow-x-auto">
+      <ul className="flex flex-col gap-1">
         {ITEMS.map((item) => {
-          const active = pathname === item.href;
+          const active =
+            item.href === "/admin/dashboard"
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
           return (
             <li key={item.href}>
@@ -26,10 +31,10 @@ export function DashboardNav() {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "inline-flex h-11 items-center whitespace-nowrap border-b-2 px-4 text-sm font-medium transition-colors",
+                  "flex h-11 items-center rounded-lg px-3 text-sm font-medium transition-colors",
                   active
-                    ? "border-primary text-foreground"
-                    : "border-transparent text-muted-foreground hover:text-foreground",
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
                 )}
               >
                 {item.label}

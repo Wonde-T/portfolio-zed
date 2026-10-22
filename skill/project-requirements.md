@@ -16,5 +16,5 @@ All uploaded images (project covers, avatars) must be sent to Cloudinary. The da
 
 # Infrastructure & Containerization
 - Next.js Container: Multi-stage build leveraging `output: 'standalone'` in `next.config.js` to keep the image lightweight.
-- Database Container: Official `mysql:8.0` image with persistent named volumes for data persistence.
-- Orchestration: A `docker-compose.yml` file to spin up both the Next.js app and MySQL database with a single `docker compose up --build` command.
+- Database Container: Official `postgres:17-alpine` image with persistent named volumes for data persistence.
+- Orchestration: A `docker-compose.yml` file to spin up both the Next.js app and PostgreSQL database with a single `docker compose up --build` command.

@@ -1,6 +1,6 @@
 node_modules
 .next
-lib/generated
+src/lib/generated
 .git
 .gitignore
 Dockerfile

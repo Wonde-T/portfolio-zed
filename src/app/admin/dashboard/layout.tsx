@@ -13,33 +13,33 @@ export default async function DashboardLayout({
   const user = await requireAdmin();
 
   return (
-    <div className="flex min-h-dvh flex-col">
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-4 px-4 pt-5">
-          <div>
-            <p className="text-sm font-semibold tracking-tight">Dashboard</p>
-            <p className="text-xs text-muted-foreground">{user.email}</p>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Link
-              href="/"
-              className="inline-flex h-11 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium transition-colors hover:bg-muted"
-            >
-              View site
-            </Link>
-            <form action={signOutAction}>
-              <SubmitButton variant="secondary">Sign out</SubmitButton>
-            </form>
-          </div>
+    <div className="flex min-h-dvh flex-col md:flex-row">
+      <aside className="flex shrink-0 flex-col gap-6 border-b border-border bg-card p-4 md:w-64 md:border-b-0 md:border-r">
+        <div>
+          <p className="text-sm font-semibold tracking-tight">Dashboard</p>
+          <p className="text-xs text-muted-foreground">{user.email}</p>
         </div>
 
-        <div className="mx-auto w-full max-w-5xl px-4">
-          <DashboardNav />
-        </div>
-      </header>
+        <DashboardNav />
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
+        <div className="flex flex-wrap items-center gap-2 md:mt-auto md:flex-col md:items-stretch">
+          <Link
+            href="/"
+            className="inline-flex h-11 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium transition-colors hover:bg-muted"
+          >
+            View site
+          </Link>
+          <form action={signOutAction}>
+            <SubmitButton variant="secondary" className="w-full">
+              Sign out
+            </SubmitButton>
+          </form>
+        </div>
+      </aside>
+
+      <main className="flex-1 px-4 py-8 md:px-8">
+        <div className="mx-auto w-full max-w-5xl">{children}</div>
+      </main>
     </div>
   );
 }

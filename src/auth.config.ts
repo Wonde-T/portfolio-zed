@@ -3,7 +3,7 @@ import type { NextAuthConfig } from "next-auth";
 /**
  * Provider-free Auth.js configuration.
  *
- * Kept separate from `auth.ts` so `proxy.ts` can verify the session cookie
+ * Kept separate from `src/auth.ts` so `src/proxy.ts` can verify the session cookie
  * without importing Prisma or the bcrypt-backed credentials provider. Proxy
  * runs on every matched request, so it stays as light as possible and only
  * performs optimistic cookie checks.

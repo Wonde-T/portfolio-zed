@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -11,7 +11,6 @@ export type NavItem = {
   label: string;
 };
 
-/** Past this scroll offset the header switches to its glass treatment. */
 const GLASS_THRESHOLD = 50;
 
 export function SiteHeader({ items }: { items: NavItem[] }) {
@@ -21,15 +20,11 @@ export function SiteHeader({ items }: { items: NavItem[] }) {
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > GLASS_THRESHOLD);
-
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Scrollspy: the section covering the upper third of the viewport wins, which
-  // keeps the highlight stable while a long section is being read.
   useEffect(() => {
     const targets = items
       .map((item) => document.getElementById(item.id))
@@ -59,10 +54,8 @@ export function SiteHeader({ items }: { items: NavItem[] }) {
     return () => observer.disconnect();
   }, [items]);
 
-  // A full-screen menu owns the viewport while it is open.
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
-
     return () => {
       document.body.style.overflow = "";
     };
@@ -72,9 +65,8 @@ export function SiteHeader({ items }: { items: NavItem[] }) {
     cn(
       "inline-flex h-11 items-center rounded-lg px-3 text-sm font-medium transition-colors",
       active === id
-        ? "text-foreground"
+        ? "text-foreground bg-muted"
         : "text-muted-foreground hover:text-foreground",
-      active === id && "bg-muted",
     );
 
   return (
@@ -119,7 +111,7 @@ export function SiteHeader({ items }: { items: NavItem[] }) {
               {menuOpen ? "Close menu" : "Open menu"}
             </span>
             <span aria-hidden="true" className="text-lg leading-none">
-              {menuOpen ? "✕" : "☰"}
+              {menuOpen ? "\xd7" : "\u2630"}
             </span>
           </button>
         </div>

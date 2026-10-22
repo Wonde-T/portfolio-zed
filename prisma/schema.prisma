@@ -1,21 +1,21 @@
 // Prisma schema for the portfolio CMS.
 // Docs: https://pris.ly/d/prisma-schema
 //
-// Field names are camelCase in TypeScript and snake_case in MySQL (@map),
+// Field names are camelCase in TypeScript and snake_case in PostgreSQL (@map),
 // matching the documented data model.
 
 generator client {
   provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  output   = "../src/lib/generated/prisma"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
 }
 
 /// Admin account. Single-owner CMS, so there is no role column.
 model User {
-  id           String   @id @default(uuid()) @db.Char(36)
+  id           String   @id @default(uuid()) @db.Uuid
   email        String   @unique @db.VarChar(191)
   passwordHash String   @map("password_hash") @db.VarChar(191)
   createdAt    DateTime @default(now()) @map("created_at")
@@ -25,7 +25,7 @@ model User {
 
 /// Global visibility + title overrides for a landing page section.
 model SectionConfig {
-  id          String  @id @default(uuid()) @db.Char(36)
+  id          String  @id @default(uuid()) @db.Uuid
   sectionName String  @unique @map("section_name") @db.VarChar(64)
   isVisible   Boolean @default(true) @map("is_visible")
   title       String? @db.VarChar(191)
@@ -35,7 +35,7 @@ model SectionConfig {
 
 /// Portfolio case study.
 model Project {
-  id                 String  @id @default(uuid()) @db.Char(36)
+  id                 String  @id @default(uuid()) @db.Uuid
   title              String  @db.VarChar(191)
   description        String  @db.Text
   contentMarkdown    String  @map("content_markdown") @db.Text
@@ -52,7 +52,7 @@ model Project {
 
 /// Technical proficiency.
 model Skill {
-  id        String  @id @default(uuid()) @db.Char(36)
+  id        String  @id @default(uuid()) @db.Uuid
   name      String  @db.VarChar(191)
   category  String  @db.VarChar(64)
   isVisible Boolean @default(true) @map("is_visible")
@@ -60,4 +60,19 @@ model Skill {
   @@unique([name, category])
   @@index([isVisible])
   @@map("skills")
+}
+
+/// Home page hero content editable from admin.
+model HomeContent {
+  id           String   @id @default(uuid()) @db.Uuid
+  greeting     String   @db.VarChar(191)
+  name         String   @db.VarChar(191)
+  role         String   @db.VarChar(191)
+  bio          String   @db.Text
+  availability String   @db.VarChar(191)
+  location     String   @db.VarChar(191)
+  email        String   @db.VarChar(191)
+  photoUrl     String?  @map("photo_url") @db.VarChar(1024)
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  @@map("home_content")
 }

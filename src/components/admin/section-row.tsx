@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useActionState } from "react";
 
@@ -10,9 +10,11 @@ import { idleState } from "@/lib/action-state";
 import type { SectionName } from "@/lib/sections";
 
 const DEFAULT_TITLES: Record<SectionName, string> = {
-  hero: "Hero",
-  skills: "Skills",
+  hero: "Home",
+  services: "My Services",
   projects: "Projects",
+  skills: "Skills",
+  about: "About",
   contact: "Contact",
 };
 
@@ -49,36 +51,25 @@ export function SectionRow({
         <div className="space-y-2">
           <label
             htmlFor={`title-${sectionName}`}
-            className="text-sm font-medium text-foreground"
+            className="text-xs font-medium uppercase tracking-wide text-muted-foreground"
           >
-            Heading override
+            Section heading
           </label>
           <input
             id={`title-${sectionName}`}
             name="title"
-            type="text"
             defaultValue={title ?? ""}
             placeholder={DEFAULT_TITLES[sectionName]}
-            aria-invalid={errors.title ? true : undefined}
-            aria-describedby={
-              errors.title ? `title-${sectionName}-error` : undefined
-            }
-            className="h-11 w-full rounded-lg border border-border bg-background px-3 text-base text-foreground transition-colors placeholder:text-muted-foreground focus:border-ring"
+            className="h-11 w-full max-w-sm rounded-lg border border-input bg-background px-3 text-sm"
           />
           <p className="text-xs text-muted-foreground">
-            Leave empty to render the default heading.
+            Leave empty to use the default heading.
           </p>
-          <div id={`title-${sectionName}-error`}>
-            <FormMessage status="error" message={errors.title?.join(" ")} />
-          </div>
+          {errors?.title ? <FormMessage status="error" message={errors.title[0]} /> : null}
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <SubmitButton variant="secondary" pendingLabel="Saving…">
-            Save heading
-          </SubmitButton>
-          <FormMessage status={state.status} message={state.message} />
-        </div>
+        <SubmitButton>Save</SubmitButton>
+        {state.message ? <FormMessage status={state.status} message={state.message} /> : null}
       </form>
     </li>
   );

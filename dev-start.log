@@ -1,0 +1,167 @@
+
+> portfolio-zed@0.1.0 dev
+> next dev
+
+▲ Next.js 16.3.8 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+- Environments: .env
+✓ Ready in 1407ms
+✓ Running next.config.ts took 136ms
+
+○ Compiling /admin/dashboard/home ...
+⨯ Error [PrismaClientKnownRequestError]: 
+Invalid `{imported module ./src/lib/db.ts}["db"].homeContent.findFirst()` invocation in
+C:\Users\admin\Desktop\portfolio-zed\.next\dev\server\chunks\ssr\[root-of-the-server]__1vzplg3._.js:150:154
+
+  147 ;
+  148 ;
+  149 const getHomeContent = (0, {imported module ./nodemodules/next/dist/server/route-modules/app-page/vendored/rsc/react.js}["cache"])(async ()=>{
+→ 150     const row = await {imported module ./src/lib/db.ts}["db"].homeContent.findFirst(
+The table `home_content` does not exist in the current database.
+    at <unknown> (src\lib\queries\home.ts:20:36)
+    at async (src\lib\queries\home.ts:20:15)
+    at async HomeContentPage (src\app\admin\dashboard\home\page.tsx:5:16)
+  18 |
+  19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+> 20 |   const row = await db.homeContent.findFirst({
+     |                                    ^
+  21 |     select: {
+  22 |       greeting: true,
+  23 |       name: true, {
+  code: 'P2021',
+  meta: {
+    modelName: 'HomeContent',
+    driverAdapterError: Error [DriverAdapterError]: TableDoesNotExist
+        at async (src\lib\queries\home.ts:20:15)
+        at async HomeContentPage (src\app\admin\dashboard\home\page.tsx:5:16)
+      18 |
+      19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+    > 20 |   const row = await db.homeContent.findFirst({
+         |               ^
+      21 |     select: {
+      22 |       greeting: true,
+      23 |       name: true, {
+      [cause]: [Object]
+    }
+  },
+  clientVersion: '7.10.0',
+  digest: '679679597'
+}
+ GET /admin/dashboard/home 500 in 9.7s (next.js: 7.6s, proxy.ts: 589ms, application-code: 1480ms)
+[browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template). 
+[browser] Uncaught PrismaClientKnownRequestError: 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"].homeContent.findFirst()` invocation in
+C:\Users\admin\Desktop\portfolio-zed\.next\dev\server\chunks\ssr\[root-of-the-server]__1vzplg3._.js:150:154
+
+  147 ;
+  148 ;
+  149 const getHomeContent = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["cache"])(async ()=>{
+→ 150     const row = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"].homeContent.findFirst(
+The table `home_content` does not exist in the current database.
+    at <unknown> (src\lib\queries\home.ts:20:36)
+    at <anonymous> (src\lib\queries\home.ts:20:15)
+    at  HomeContentPage (src\app\admin\dashboard\home\page.tsx:5:16)
+  18 |
+  19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+> 20 |   const row = await db.homeContent.findFirst({
+     |                                    ^
+  21 |     select: {
+  22 |       greeting: true,
+  23 |       name: true,
+⨯ Error [PrismaClientKnownRequestError]: 
+Invalid `{imported module ./src/lib/db.ts}["db"].homeContent.findFirst()` invocation in
+C:\Users\admin\Desktop\portfolio-zed\.next\dev\server\chunks\ssr\[root-of-the-server]__1vzplg3._.js:150:154
+
+  147 ;
+  148 ;
+  149 const getHomeContent = (0, {imported module ./nodemodules/next/dist/server/route-modules/app-page/vendored/rsc/react.js}["cache"])(async ()=>{
+→ 150     const row = await {imported module ./src/lib/db.ts}["db"].homeContent.findFirst(
+The table `home_content` does not exist in the current database.
+    at <unknown> (src\lib\queries\home.ts:20:36)
+    at async (src\lib\queries\home.ts:20:15)
+    at async HomeContentPage (src\app\admin\dashboard\home\page.tsx:5:16)
+  18 |
+  19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+> 20 |   const row = await db.homeContent.findFirst({
+     |                                    ^
+  21 |     select: {
+  22 |       greeting: true,
+  23 |       name: true, {
+  code: 'P2021',
+  meta: {
+    modelName: 'HomeContent',
+    driverAdapterError: Error [DriverAdapterError]: TableDoesNotExist
+        at async (src\lib\queries\home.ts:20:15)
+        at async HomeContentPage (src\app\admin\dashboard\home\page.tsx:5:16)
+      18 |
+      19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+    > 20 |   const row = await db.homeContent.findFirst({
+         |               ^
+      21 |     select: {
+      22 |       greeting: true,
+      23 |       name: true, {
+      [cause]: [Object]
+    }
+  },
+  clientVersion: '7.10.0',
+  digest: '679679597'
+}
+ GET /admin/dashboard/home 200 in 159ms (next.js: 21ms, proxy.ts: 35ms, application-code: 104ms)
+[browser] Uncaught PrismaClientKnownRequestError: 
+Invalid `__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"].homeContent.findFirst()` invocation in
+C:\Users\admin\Desktop\portfolio-zed\.next\dev\server\chunks\ssr\[root-of-the-server]__1vzplg3._.js:150:154
+
+  147 ;
+  148 ;
+  149 const getHomeContent = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["cache"])(async ()=>{
+→ 150     const row = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$db$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["db"].homeContent.findFirst(
+The table `home_content` does not exist in the current database.
+    at <unknown> (src\lib\queries\home.ts:20:36)
+    at <anonymous> (src\lib\queries\home.ts:20:15)
+    at  HomeContentPage (src\app\admin\dashboard\home\page.tsx:5:16)
+  18 |
+  19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+> 20 |   const row = await db.homeContent.findFirst({
+     |                                    ^
+  21 |     select: {
+  22 |       greeting: true,
+  23 |       name: true,
+⨯ Error [PrismaClientKnownRequestError]: 
+Invalid `{imported module ./src/lib/db.ts}["db"].homeContent.findFirst()` invocation in
+C:\Users\admin\Desktop\portfolio-zed\.next\dev\server\chunks\ssr\[root-of-the-server]__1vzplg3._.js:150:154
+
+  147 ;
+  148 ;
+  149 const getHomeContent = (0, {imported module ./nodemodules/next/dist/server/route-modules/app-page/vendored/rsc/react.js}["cache"])(async ()=>{
+→ 150     const row = await {imported module ./src/lib/db.ts}["db"].homeContent.findFirst(
+The table `home_content` does not exist in the current database.
+    at <unknown> (src\lib\queries\home.ts:20:36)
+    at async (src\lib\queries\home.ts:20:15)
+    at async HomePage (src\app\(site)\page.tsx:17:46)
+  18 |
+  19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+> 20 |   const row = await db.homeContent.findFirst({
+     |                                    ^
+  21 |     select: {
+  22 |       greeting: true,
+  23 |       name: true, {
+  code: 'P2021',
+  meta: {
+    modelName: 'HomeContent',
+    driverAdapterError: Error [DriverAdapterError]: TableDoesNotExist
+        at async (src\lib\queries\home.ts:20:15)
+        at async HomePage (src\app\(site)\page.tsx:17:46)
+      18 |
+      19 | export const getHomeContent = cache(async (): Promise<HomeData> => {
+    > 20 |   const row = await db.homeContent.findFirst({
+         |               ^
+      21 |     select: {
+      22 |       greeting: true,
+      23 |       name: true, {
+      [cause]: [Object]
+    }
+  },
+  clientVersion: '7.10.0',
+  digest: '1596112484'
+}

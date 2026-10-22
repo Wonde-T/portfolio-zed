@@ -2,36 +2,27 @@ name: portfolio-zed
 
 services:
   db:
-    image: mysql:8.0
+    image: postgres:17-alpine
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-portfolio-root}
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-portfolio}
-      MYSQL_USER: ${MYSQL_USER:-portfolio}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-portfolio}
+      POSTGRES_DB: ${POSTGRES_DB:-portfolio}
+      POSTGRES_USER: ${POSTGRES_USER:-portfolio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portfolio}
     ports:
-      # Override with MYSQL_PORT in .env when the host already uses 3306.
-      - "${MYSQL_PORT:-3306}:3306"
+      # Override with POSTGRES_PORT in .env when the host already uses 5432.
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
-      - mysql-data:/var/lib/mysql
-      # Grants the dev user permission to create Prisma's shadow database.
-      - ./docker/mysql-init:/docker-entrypoint-initdb.d:ro
+      - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test:
         [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "127.0.0.1",
-          "-u",
-          "root",
-          "-p${MYSQL_ROOT_PASSWORD:-portfolio-root}",
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-portfolio} -d ${POSTGRES_DB:-portfolio}",
         ]
       interval: 5s
       timeout: 5s
       retries: 20
-      start_period: 30s
+      start_period: 10s
 
   # Applies pending migrations and seeds, then exits. The app waits for it.
   migrate:
@@ -39,7 +30,7 @@ services:
       context: .
       target: migrate
     environment:
-      DATABASE_URL: mysql://${MYSQL_USER:-portfolio}:${MYSQL_PASSWORD:-portfolio}@db:3306/${MYSQL_DATABASE:-portfolio}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-portfolio}@db:5432/${POSTGRES_DB:-portfolio}
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-portfolio-dev-password}
     depends_on:
@@ -60,7 +51,7 @@ services:
     restart: unless-stopped
     environment:
       NODE_ENV: production
-      DATABASE_URL: mysql://${MYSQL_USER:-portfolio}:${MYSQL_PASSWORD:-portfolio}@db:3306/${MYSQL_DATABASE:-portfolio}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-portfolio}@db:5432/${POSTGRES_DB:-portfolio}
       AUTH_SECRET: ${AUTH_SECRET:?AUTH_SECRET must be set}
       AUTH_TRUST_HOST: "true"
       ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@example.com}
@@ -78,4 +69,4 @@ services:
         condition: service_completed_successfully
 
 volumes:
-  mysql-data:
+  postgres-data:

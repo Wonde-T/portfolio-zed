@@ -20,6 +20,8 @@ type ImageUploadFieldProps = {
   defaultValue?: string | undefined;
   errors?: string[] | undefined;
   hint?: string;
+  /** Preview shape: rectangular for covers, circular for portraits. */
+  shape?: "rect" | "circle";
   /**
    * Whether this server has Cloudinary credentials. Without them the widget
    * cannot sign anything, so the field degrades to a plain URL input instead of
@@ -40,6 +42,7 @@ export function ImageUploadField({
   defaultValue,
   errors,
   hint,
+  shape = "rect",
   configured,
 }: ImageUploadFieldProps) {
   const [value, setValue] = useState(defaultValue ?? "");
@@ -92,7 +95,12 @@ export function ImageUploadField({
             width={160}
             height={120}
             unoptimized
-            className="h-28 w-40 shrink-0 rounded-lg border border-border object-cover"
+            className={cn(
+              "shrink-0 border border-border object-cover",
+              shape === "circle"
+                ? "h-28 w-28 rounded-full"
+                : "h-28 w-40 rounded-lg",
+            )}
           />
         ) : null}
 

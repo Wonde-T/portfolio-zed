@@ -14,7 +14,7 @@ before rendering the client UI.
 - Language: TypeScript (strict typing).
 - Styling: Tailwind CSS (Mobile-first approach).
 - Animations: Framer Motion.
-- Database: MySQL.
+- Database: PostgreSQL.
 - ORM: Prisma ORM.
 - Authentication: NextAuth.js (Auth.js) for JWT-based admin login.
 - Media Storage: Cloudinary (via next-cloudinary).
@@ -26,7 +26,7 @@ before the HTML is rendered to the client.
 update the public UI instantly without Redis.
 - Next.js Container: Built using a multi-stage Dockerfile leveraging Next.js 'standalone' output for a
 lightweight production image.
-- MySQL Container: Uses the official mysql:8.0 image with persistent volume mounts to prevent data
+- PostgreSQL Container: Uses the official postgres:17-alpine image with persistent volume mounts to prevent data
 loss.
 
 - Orchestration: Managed via docker-compose.yml to spin up the web app and database

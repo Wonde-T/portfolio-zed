@@ -8,9 +8,9 @@ import "dotenv/config";
 
 import bcrypt from "bcryptjs";
 
-import { PrismaClient } from "../lib/generated/prisma/client";
-import { createPrismaAdapter } from "../lib/prisma-adapter";
-import { SECTION_NAMES } from "../lib/sections";
+import { PrismaClient } from "../src/lib/generated/prisma/client";
+import { createPrismaAdapter } from "../src/lib/prisma-adapter";
+import { SECTION_NAMES } from "../src/lib/sections";
 
 const prisma = new PrismaClient({ adapter: createPrismaAdapter(1) });
 
@@ -31,7 +31,7 @@ const SKILLS: Array<{ name: string; category: string }> = [
   { name: "Tailwind CSS", category: "Frontend" },
   { name: "Framer Motion", category: "Frontend" },
   { name: "Node.js", category: "Backend" },
-  { name: "MySQL", category: "Backend" },
+  { name: "PostgreSQL", category: "Backend" },
   { name: "Prisma", category: "Backend" },
   { name: "Auth.js", category: "Backend" },
   { name: "Docker", category: "Tools" },
@@ -57,7 +57,7 @@ const PROJECTS: Array<{
   {
     title: "Portfolio CMS",
     description:
-      "This site. A feature-flagged portfolio with a server-rendered admin dashboard, MySQL persistence and Cloudinary media.",
+      "This site. A feature-flagged portfolio with a server-rendered admin dashboard, PostgreSQL persistence and Cloudinary media.",
     contentMarkdown: `## Why build a CMS for a portfolio?
 
 A portfolio is content, and content rots. This project treats the portfolio as
@@ -96,7 +96,7 @@ responsive sizing on top of it.`,
 Server-Sent Events are enough for one-way data, and they survive proxies that
 break websocket upgrades.
 
-- Aggregations run in MySQL with covering indexes
+- Aggregations run in PostgreSQL with covering indexes
 - The UI updates optimistically and reconciles on each event
 - Reconnection uses exponential backoff with jitter`,
     cloudinaryImageUrl: `${DEMO_IMAGE_BASE}/landscapes/beach-boat.jpg`,

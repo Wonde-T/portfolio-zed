@@ -30,7 +30,7 @@ export const siteConfig: SiteConfig = {
   name: "Your Name",
   role: "Full-Stack Developer",
   description:
-    "Full-stack developer building fast, accessible web applications with Next.js, TypeScript and MySQL.",
+    "Full-stack developer building fast, accessible web applications with Next.js, TypeScript and PostgreSQL.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   greeting: "Hi there, I'm",
   bio: "I design and build full-stack products end to end — from relational data models and server APIs to polished, animated interfaces. I care about performance, accessibility and code that the next person can maintain.",

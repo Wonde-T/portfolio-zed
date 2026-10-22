@@ -1,4 +1,4 @@
-import "server-only";
+﻿import "server-only";
 
 import { db } from "@/lib/db";
 import { requireAdmin } from "@/lib/dal";
@@ -11,32 +11,53 @@ export type SectionRow = {
   title: string | null;
 };
 
-/**
- * All four section toggles in landing-page order, for the admin sections table.
- *
- * Admin-only on purpose: this returns hidden rows too, which is exactly what the
- * public renderer must never do.
- */
 export async function listSections(): Promise<SectionRow[]> {
   await requireAdmin();
 
   const rows = await db.sectionConfig.findMany();
   const byName = new Map(rows.map((row) => [row.sectionName, row]));
 
-  return SECTION_NAMES.flatMap((sectionName) => {
-    const row = byName.get(sectionName);
+  const results: SectionRow[] = [];
 
-    if (!row || !isSectionName(row.sectionName)) {
-      return [];
+  for (const sectionName of SECTION_NAMES) {
+    if (!isSectionName(sectionName)) {
+      continue;
     }
 
-    return [
-      {
-        id: row.id,
-        sectionName: row.sectionName,
-        isVisible: row.isVisible,
-        title: row.title,
-      },
-    ];
-  });
+    const existing = byName.get(sectionName);
+
+    if (existing) {
+      results.push({
+        id: existing.id,
+        sectionName: existing.sectionName as SectionName,
+        isVisible: existing.isVisible,
+        title: existing.title,
+      });
+    } else {
+      const created = await db.sectionConfig.upsert({
+        where: { sectionName },
+        update: {},
+        create: {
+          sectionName,
+          isVisible: true,
+          title: null,
+        },
+        select: {
+          id: true,
+          sectionName: true,
+          isVisible: true,
+          title: true,
+        },
+      });
+
+      results.push({
+        id: created.id,
+        sectionName: created.sectionName as SectionName,
+        isVisible: created.isVisible,
+        title: created.title,
+      });
+    }
+  }
+
+  return results;
 }

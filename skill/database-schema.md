@@ -1,4 +1,4 @@
-# Database Architecture (Prisma/MySQL)
+  Database Architecture (Prisma/PostgreSQL)
 Below are the exact models required for the `schema.prisma` file. Generate the Prisma configurations based on this structure.
 
 1. User (Admin)

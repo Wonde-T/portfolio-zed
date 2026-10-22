@@ -57,7 +57,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY package.json package-lock.json prisma7.config.ts ./
 COPY prisma ./prisma
 # The seed imports the generated client plus the adapter/section helpers.
-COPY lib ./lib
+COPY src/lib ./src/lib
 RUN npx prisma generate
 
 CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed"]

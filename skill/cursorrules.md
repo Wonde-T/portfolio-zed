@@ -1,6 +1,6 @@
 # Role and Tech Stack
 You are an expert full-stack developer building a dynamic portfolio CMS.
-The tech stack is Next.js (App Router), TypeScript, Tailwind CSS, Prisma (MySQL), and Framer Motion. 
+The tech stack is Next.js (App Router), TypeScript, Tailwind CSS, Prisma (PostgreSQL), and Framer Motion. 
 
 # Initialization Rules
 If the project is empty, initialize it using `npx create-next-app@latest .` with TypeScript, Tailwind, App Router, and no src/ directory. Install Prisma, NextAuth (Auth.js), next-cloudinary, next-themes, and framer-motion.
@@ -15,4 +15,4 @@ If the project is empty, initialize it using `npx create-next-app@latest .` with
 
 # Infrastructure & Deployment
 - Dockerize the entire application: Provide a multi-stage `Dockerfile` optimized for Next.js standalone output.
-- Docker Compose: Provide a `docker-compose.yml` defining services for the Next.js app and the MySQL database container with health checks and persistent volume storage.
+- Docker Compose: Provide a `docker-compose.yml` defining services for the Next.js app and the PostgreSQL database container with health checks and persistent volume storage.
