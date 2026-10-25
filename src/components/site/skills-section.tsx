@@ -31,7 +31,7 @@ export function SkillsSection({
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
-      className="scroll-mt-24 border-t border-border py-20 sm:py-24"
+      className="scroll-mt-24 py-20 sm:py-24"
     >
       <h2
         id="skills-heading"

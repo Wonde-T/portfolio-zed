@@ -31,7 +31,7 @@ export default function SiteLoading() {
       </section>
 
       {/* Projects skeleton */}
-      <section className="scroll-mt-24 border-t border-border py-20 sm:py-24">
+      <section className="scroll-mt-24 py-20 sm:py-24">
         <Skeleton className="h-8 w-48 sm:h-9" />
         <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -56,7 +56,7 @@ export default function SiteLoading() {
       </section>
 
       {/* Skills skeleton */}
-      <section className="scroll-mt-24 border-t border-border py-20 sm:py-24">
+      <section className="scroll-mt-24 py-20 sm:py-24">
         <Skeleton className="h-8 w-40 sm:h-9" />
         <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -76,7 +76,7 @@ export default function SiteLoading() {
       </section>
 
       {/* About skeleton */}
-      <section className="scroll-mt-24 border-t border-border py-20 sm:py-24">
+      <section className="scroll-mt-24 py-20 sm:py-24">
         <Skeleton className="h-8 w-32 sm:h-9" />
         <div className="mt-6 max-w-3xl space-y-3">
           <Skeleton className="h-4 w-full" />
@@ -86,7 +86,7 @@ export default function SiteLoading() {
       </section>
 
       {/* Contact skeleton */}
-      <section className="scroll-mt-24 border-t border-border py-20 sm:py-24">
+      <section className="scroll-mt-24 py-20 sm:py-24">
         <Skeleton className="h-8 w-40 sm:h-9" />
         <Skeleton className="mt-6 h-4 w-72" />
         <Skeleton className="mt-8 h-11 w-36 rounded-lg" />

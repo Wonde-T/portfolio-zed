@@ -72,14 +72,14 @@ export function SiteHeader({ items }: { items: NavItem[] }) {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 transition-colors",
+        "fixed inset-x-0 top-0 z-50 transition-colors",
         scrolled && "bg-background/70 backdrop-blur-md",
       )}
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:max-w-[53rem] lg:px-0">
         <a
           href="#top"
-          className="inline-flex h-11 items-center text-sm font-semibold tracking-tight"
+          className="inline-flex h-11 items-center text-base font-semibold tracking-tight sm:text-lg"
         >
           Portfolio
         </a>

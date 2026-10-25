@@ -98,19 +98,6 @@ export function HomeForm({
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="location" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-          Location
-        </label>
-        <input
-          id="location"
-          name="location"
-          defaultValue={initial.location}
-          className="h-11 w-full rounded-lg border border-input bg-background px-3 text-sm"
-        />
-        {errors?.location ? <FormMessage status="error" message={errors.location[0]} /> : null}
-      </div>
-
-      <div className="space-y-2">
         <label htmlFor="email" className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
           Email
         </label>

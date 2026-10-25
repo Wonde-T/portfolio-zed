@@ -98,7 +98,7 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
         <Markdown remarkPlugins={[remarkGfm]}>{project.contentMarkdown}</Markdown>
       </div>
 
-      <footer className="mt-12 border-t border-border pt-6 text-sm text-muted-foreground">
+      <footer className="mt-12 pt-6 text-sm text-muted-foreground">
         <Link
           href="/"
           className="inline-flex h-11 items-center underline underline-offset-4 transition-colors hover:text-foreground"

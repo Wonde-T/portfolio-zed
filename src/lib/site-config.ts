@@ -20,7 +20,6 @@ export type SiteConfig = {
   url: string;
   greeting: string;
   bio: string;
-  location: string;
   availability: string;
   email: string;
   socials: SocialLink[];
@@ -34,7 +33,6 @@ export const siteConfig: SiteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
   greeting: "Hi there, I'm",
   bio: "I design and build full-stack products end to end — from relational data models and server APIs to polished, animated interfaces. I care about performance, accessibility and code that the next person can maintain.",
-  location: "Remote — CET",
   availability: "Available for freelance work",
   email: "hello@example.com",
   socials: [

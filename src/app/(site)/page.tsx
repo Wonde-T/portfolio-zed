@@ -18,7 +18,7 @@ export const dynamic = "force-dynamic";
 function HeroSkeleton() {
   return (
     <section className="scroll-mt-24 py-20 sm:py-28">
-      <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
+      <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,32rem)_auto] lg:justify-center lg:gap-12">
         <div className="order-2 lg:order-1">
           <Skeleton className="h-4 w-24" />
           <Skeleton className="mt-3 h-12 w-3/4 sm:h-14 lg:h-16" />
@@ -28,7 +28,6 @@ function HeroSkeleton() {
           <Skeleton className="mt-2 h-4 w-4/6 max-w-prose" />
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <Skeleton className="h-9 w-28 rounded-full" />
-            <Skeleton className="h-9 w-24 rounded-full" />
           </div>
           <div className="mt-10 flex flex-wrap gap-3">
             <Skeleton className="h-11 w-32 rounded-lg" />
@@ -47,7 +46,7 @@ function HeroSkeleton() {
 
 function ProjectsSkeleton() {
   return (
-    <section className="scroll-mt-24 border-t border-border py-20 sm:py-24">
+    <section className="scroll-mt-24 py-20 sm:py-24">
       <Skeleton className="h-8 w-48 sm:h-9" />
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -72,7 +71,7 @@ function ProjectsSkeleton() {
 
 function SkillsSkeleton() {
   return (
-    <section className="scroll-mt-24 border-t border-border py-20 sm:py-24">
+    <section className="scroll-mt-24 py-20 sm:py-24">
       <Skeleton className="h-8 w-40 sm:h-9" />
       <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {Array.from({ length: 3 }).map((_, i) => (
@@ -102,12 +101,73 @@ async function HeroSection() {
       role={home.role}
       bio={home.bio}
       availability={home.availability}
-      location={home.location}
       photoUrl={home.photoUrl}
       hasProjects={visible.has("projects")}
       hasContact={visible.has("contact")}
       email={home.email}
     />
+  );
+}
+
+async function ServicesSection() {
+  const [sections] = await Promise.all([listPublicSections()]);
+  const visible = new Set(sections.map((section) => section.sectionName));
+  const titleOf = (name: (typeof sections)[number]["sectionName"]) =>
+    sections.find((section) => section.sectionName === name)?.title ?? "";
+
+  if (!visible.has("services")) return null;
+
+  return (
+    <section
+      id="services"
+      aria-labelledby="services-heading"
+      className="scroll-mt-24 py-20 sm:py-24"
+    >
+      <h2
+        id="services-heading"
+        className="text-2xl font-semibold tracking-tight sm:text-3xl"
+      >
+        {titleOf("services")}
+      </h2>
+      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {[
+          {
+            title: "Web Development",
+            description:
+              "Responsive, accessible, and performant web apps built with Next.js and TypeScript.",
+            features: ["Frontend & Backend", "REST/GraphQL APIs", "Database Design"],
+          },
+          {
+            title: "UI/UX Implementation",
+            description:
+              "Pixel-perfect interfaces with smooth animations and thoughtful user experiences.",
+            features: ["Component Systems", "Tailwind CSS", "Framer Motion"],
+          },
+          {
+            title: "Technical Consulting",
+            description:
+              "Architecture reviews, performance optimization, and best practices guidance.",
+            features: ["Code Reviews", "Scalable Architecture", "DevOps Basics"],
+          },
+        ].map((service) => (
+          <div
+            key={service.title}
+            className="rounded-xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
+          >
+            <h3 className="text-xl font-semibold tracking-tight">{service.title}</h3>
+            <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
+            <ul className="mt-4 space-y-1.5 text-sm">
+              {service.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-2">
+                  <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -148,64 +208,11 @@ async function OtherSections() {
 
   return (
     <>
-      {visible.has("services") ? (
-        <section
-          id="services"
-          aria-labelledby="services-heading"
-          className="scroll-mt-24 border-t border-border py-20 sm:py-24"
-        >
-          <h2
-            id="services-heading"
-            className="text-2xl font-semibold tracking-tight sm:text-3xl"
-          >
-            {titleOf("services")}
-          </h2>
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                title: "Web Development",
-                description:
-                  "Responsive, accessible, and performant web apps built with Next.js and TypeScript.",
-                features: ["Frontend & Backend", "REST/GraphQL APIs", "Database Design"],
-              },
-              {
-                title: "UI/UX Implementation",
-                description:
-                  "Pixel-perfect interfaces with smooth animations and thoughtful user experiences.",
-                features: ["Component Systems", "Tailwind CSS", "Framer Motion"],
-              },
-              {
-                title: "Technical Consulting",
-                description:
-                  "Architecture reviews, performance optimization, and best practices guidance.",
-                features: ["Code Reviews", "Scalable Architecture", "DevOps Basics"],
-              },
-            ].map((service) => (
-              <div
-                key={service.title}
-                className="rounded-xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
-              >
-                <h3 className="text-xl font-semibold tracking-tight">{service.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{service.description}</p>
-                <ul className="mt-4 space-y-1.5 text-sm">
-                  {service.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2">
-                      <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary" />
-                      <span>{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
       {visible.has("about") ? (
         <section
           id="about"
           aria-labelledby="about-heading"
-          className="scroll-mt-24 border-t border-border py-20 sm:py-24"
+          className="scroll-mt-24 py-20 sm:py-24"
         >
           <h2
             id="about-heading"
@@ -213,15 +220,11 @@ async function OtherSections() {
           >
             {titleOf("about")}
           </h2>
-          <div className="mt-6 max-w-3xl space-y-4 text-muted-foreground sm:text-lg">
+          <div className="mt-6 max-w-lg space-y-4 text-muted-foreground sm:text-lg">
             <p>
-              I design and build clean, accessible, and performant web applications. With a focus on
-              modern tooling and solid engineering practices, I turn ideas into reliable digital
-              experiences.
-            </p>
-            <p>
-              Passionate about creating maintainable codebases, thoughtful UI, and scalable
-              solutions. Always learning and improving.
+              I design and build full-stack products end to end — from relational data models and
+              server APIs to polished, animated interfaces. I care about performance, accessibility
+              and code that the next person can maintain.
             </p>
           </div>
         </section>
@@ -249,6 +252,10 @@ export default function HomePage() {
     <>
       <Suspense fallback={<HeroSkeleton />}>
         <HeroSection />
+      </Suspense>
+
+      <Suspense fallback={<ProjectsSkeleton />}>
+        <ServicesSection />
       </Suspense>
 
       <Suspense fallback={<ProjectsSkeleton />}>

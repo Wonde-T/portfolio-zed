@@ -9,7 +9,6 @@ type HeroProps = {
   role: string;
   bio: string;
   availability: string;
-  location: string;
   /** Cloudinary portrait URL, or `null` to fall back to the initials monogram. */
   photoUrl: string | null;
   /** Only rendered when the matching section is enabled in the dashboard. */
@@ -53,7 +52,6 @@ export function Hero({
   role,
   bio,
   availability,
-  location,
   photoUrl,
   hasProjects,
   hasContact,
@@ -68,7 +66,7 @@ export function Hero({
       animate="show"
       className="scroll-mt-24 py-20 sm:py-28"
     >
-      <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
+      <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,32rem)_auto] lg:justify-center lg:gap-12">
         <div className="order-2 lg:order-1">
           <motion.p variants={item} className="text-sm font-medium text-primary">
             {greeting}
@@ -91,7 +89,7 @@ export function Hero({
 
           <motion.p
             variants={item}
-            className="mt-6 max-w-prose text-base text-foreground/80 sm:text-lg"
+            className="mt-6 max-w-lg text-base text-foreground/80 sm:text-lg"
           >
             {bio}
           </motion.p>
@@ -102,9 +100,6 @@ export function Hero({
           >
             <span className="rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">
               {availability}
-            </span>
-            <span className="rounded-full border border-border px-4 py-2 text-sm text-muted-foreground">
-              {location}
             </span>
           </motion.div>
 

@@ -12,7 +12,6 @@ export type HomeData = {
   role: string;
   bio: string;
   availability: string;
-  location: string;
   email: string;
   /** Cloudinary delivery URL for the hero portrait, or `null` when unset. */
   photoUrl: string | null;
@@ -26,7 +25,6 @@ export const getHomeContent = cache(async (): Promise<HomeData> => {
       role: true,
       bio: true,
       availability: true,
-      location: true,
       email: true,
       photoUrl: true,
     },
@@ -39,7 +37,6 @@ export const getHomeContent = cache(async (): Promise<HomeData> => {
       role: siteConfig.role,
       bio: siteConfig.bio,
       availability: siteConfig.availability,
-      location: siteConfig.location,
       email: siteConfig.email,
       photoUrl: null,
     };

@@ -35,7 +35,7 @@ export function ProjectsSection({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
-      className="scroll-mt-24 border-t border-border py-20 sm:py-24"
+      className="scroll-mt-24 py-20 sm:py-24"
     >
       <div className="flex flex-wrap items-end justify-between gap-4">
         <h2

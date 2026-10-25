@@ -17,7 +17,6 @@ export const homeSchema = z.object({
   role: z.string().trim().min(1, "Role is required.").max(191),
   bio: z.string().trim().min(1, "Bio is required."),
   availability: z.string().trim().min(1, "Availability is required.").max(191),
-  location: z.string().trim().min(1, "Location is required.").max(191),
   email: z.string().trim().min(1, "Email is required.").max(191),
   photoUrl: optionalCloudinaryImageUrl,
 });
@@ -29,7 +28,6 @@ export function homeInput(formData: FormData) {
     role: text(formData, "role"),
     bio: text(formData, "bio"),
     availability: text(formData, "availability"),
-    location: text(formData, "location"),
     email: text(formData, "email"),
     photoUrl: text(formData, "photoUrl").trim(),
   };

@@ -70,7 +70,6 @@ model HomeContent {
   role         String   @db.VarChar(191)
   bio          String   @db.Text
   availability String   @db.VarChar(191)
-  location     String   @db.VarChar(191)
   email        String   @db.VarChar(191)
   photoUrl     String?  @map("photo_url") @db.VarChar(1024)
   updatedAt    DateTime @updatedAt @map("updated_at")
