@@ -61,6 +61,7 @@
 
   --animate-fade-in: fade-in 0.4s ease-out both;
   --animate-fade-out: fade-out 0.2s ease-in both;
+  --animate-shimmer: shimmer 2s linear infinite;
 
   @keyframes fade-in {
     from {
@@ -77,6 +78,15 @@
     }
     to {
       opacity: 0;
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
     }
   }
 }
