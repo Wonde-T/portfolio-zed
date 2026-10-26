@@ -1,26 +1,35 @@
 # Design System, Interactivity & Responsiveness
-The UI must feel tactile, modern, and work flawlessly on both desktop and mobile devices. Implement the following behaviors using Tailwind CSS and Framer Motion.
+The UI must feel tactile, modern, and work flawlessly on both desktop and mobile devices. Implement the following behaviors using Tailwind CSS and **GSAP** (`gsap`, `@gsap/react`, ScrollTrigger, Flip, ScrollToPlugin) on the public site. Admin screens still use Framer Motion.
+
+# GSAP Conventions
+- Always import from `@/lib/gsap` (registers plugins once, exports `gsap`, `useGSAP`, `ScrollTrigger`, `Flip`, `scrollToTarget`, and the `MOTION_OK` / `MOTION_REDUCED` / `DESKTOP` media queries).
+- Animate inside `useGSAP(..., { scope })` so tweens and ScrollTriggers are reverted on unmount.
+- Wrap animations in `gsap.matchMedia()`: `MOTION_OK` for full motion, `MOTION_REDUCED` as a fallback that only reveals content.
+- Elements that start hidden carry `data-anim` (or `data-reveal`); `globals.css` hides them only when JS is enabled, and a GSAP tween (or the reduced-motion fallback) must reveal them. Use `fromTo` with `autoAlpha` for these.
+- Shared building blocks live in `src/components/site`: `Reveal` (scroll-triggered stagger), `SectionHeading` (masked-word title), `SplitWords`, `Magnetic` (pointer-follow buttons), `SiteEffects` (ambient background, cursor glow, scroll progress, spotlight pointer tracking).
 
 # Responsive Layouts (Mobile & Desktop)
 - Mobile-First: All sections must stack cleanly on mobile devices using flex column layouts, transitioning to side-by-side or multi-column grids on desktop (`md:` and `lg:` Tailwind breakpoints).
-- Navigation Menu: On desktop, display standard inline navigation links. On mobile, hide the inline links and implement a sliding or fading full-screen hamburger menu.
+- Navigation Menu: On desktop, display a floating glass pill with a sliding active indicator. On mobile, hide the inline links and open a full-screen circular-reveal menu (GSAP timeline) from the hamburger.
 - Touch Targets: Ensure all buttons, links, and filter tabs are at least 44x44px to be easily tappable on mobile screens.
 
 # Global Navigation
-- Sticky Header: The top navigation bar must remain sticky. When scrolled past the top (Y > 50), apply a glass-morphism effect (`backdrop-blur-md`, semi-transparent background).
-- Theme Toggle: Implement a smooth fade transition between Dark and Light mode using `next-themes`.
-- Scrollspy: Navigation links must highlight their active state based on which section is currently intersecting the viewport.
+- Sticky Header: The header remains fixed. When scrolled past the top (Y > 50), the pill gets a glass-morphism effect.
+- Theme Toggle: Smooth fade transition between Dark and Light mode using `next-themes`.
+- Scrollspy: Navigation links highlight (and the indicator slides to) the section intersecting the viewport. Anchor clicks scroll with GSAP ScrollToPlugin.
+- Scroll progress: a thin gradient bar at the top of the viewport scrubs with page scroll.
 
 # Hero Section
-- Staggered Entrance: Elements must not appear at once. Use a Framer Motion staggered container to fade and slide up the greeting, title, description, and buttons in sequence on initial load.
-- Responsive Typography: Hero text should scale down appropriately for mobile screens to prevent overflow.
+- Staggered Entrance: a GSAP timeline reveals the availability badge, greeting, name (masked word slide-up), role, bio and buttons in sequence, then the portrait and floating chips.
+- Ambient motion: rotating gradient ring around the portrait, floating chips, desktop mouse-parallax layers, scroll-out fade.
+- Responsive Typography: Hero text scales down for mobile to prevent overflow.
 
 # Projects Gallery
-- Responsive Grid: Display 1 column on mobile, 2 on tablets, and 3 on desktops.
-- Filtering: Project cards must use an animated layout transition (Framer Motion `layout` prop) when the user clicks category filter tabs, smoothly reorganizing the grid.
-- Card Hover State (Desktop): Hovering a project card must trigger a subtle scale-up (`scale-105`) of the image, while sliding an overlay up from the bottom containing links.
-- Card Active State (Mobile): Since there is no hover on mobile, ensure the GitHub and Live Demo links are always visible under the image or accessible via a single tap.
+- Responsive Grid: 1 column on mobile, 2 on tablets, 3 on desktops.
+- Filtering: category tabs use GSAP **Flip** to smoothly reorganize the grid (cards enter/leave with scale + fade).
+- Card Hover State (Desktop, hover-capable pointer only): GSAP zooms the image, tilts the card in 3D and slides an overlay with links up from the bottom.
+- Card Active State (Mobile/touch): Case study, GitHub and Live Demo links are always visible under the text.
 
 # Scroll Behaviors
-- Scroll Reveals: The Skills and Contact sections must slide up and fade in only when they scroll into the viewport (`whileInView` in Framer Motion). Disable heavy scroll animations on mobile if they impact performance.
-- Scroll-to-Top: A floating arrow button in the bottom right corner must fade in after scrolling past the Hero section and smoothly scroll to the top when clicked.
+- Scroll Reveals: Sections reveal with ScrollTrigger (`once: true`). About text lights up word-by-word with scrub. Skills has a looping marquee.
+- Scroll-to-Top: A floating button with a progress ring fades in after 400px of scroll and scrolls to the top with GSAP.

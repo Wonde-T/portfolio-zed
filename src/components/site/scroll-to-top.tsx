@@ -1,37 +1,96 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useRef } from "react";
 
-/** Appears once the hero has scrolled away. */
+import { MOTION_OK, MOTION_REDUCED, ScrollTrigger, gsap, scrollToTarget, useGSAP } from "@/lib/gsap";
+
+const RADIUS = 20;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+/** Appears once the hero has scrolled away; the ring shows page scroll progress. */
 export function ScrollToTop() {
-  const [visible, setVisible] = useState(false);
+  const button = useRef<HTMLButtonElement>(null);
+  const ring = useRef<SVGCircleElement>(null);
 
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 400);
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const toggle = (visible: boolean, animate: boolean) =>
+      gsap.to(button.current, {
+        autoAlpha: visible ? 1 : 0,
+        y: visible ? 0 : 16,
+        scale: visible ? 1 : 0.8,
+        duration: animate ? 0.4 : 0,
+        ease: visible ? "back.out(1.8)" : "power2.in",
+        overwrite: "auto",
+      });
 
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    mm.add(MOTION_OK, () => {
+      ScrollTrigger.create({
+        start: 400,
+        end: "max",
+        onToggle: (self) => toggle(self.isActive, true),
+      });
+
+      gsap.fromTo(
+        ring.current,
+        { strokeDashoffset: CIRCUMFERENCE },
+        {
+          strokeDashoffset: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: document.documentElement,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 0.3,
+          },
+        },
+      );
+    });
+
+    mm.add(MOTION_REDUCED, () => {
+      ScrollTrigger.create({
+        start: 400,
+        end: "max",
+        onToggle: (self) => toggle(self.isActive, false),
+      });
+    });
+  });
 
   return (
-    <AnimatePresence>
-      {visible ? (
-        <motion.button
-          type="button"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.2 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-6 z-40 inline-flex size-11 items-center justify-center rounded-full border border-border bg-background/90 backdrop-blur transition-colors hover:bg-muted"
-        >
-          <span className="sr-only">Back to top</span>
-          <span aria-hidden="true">↑</span>
-        </motion.button>
-      ) : null}
-    </AnimatePresence>
+    <button
+      ref={button}
+      type="button"
+      onClick={() => scrollToTarget(0)}
+      className="glass invisible fixed bottom-6 right-6 z-40 inline-flex size-12 items-center justify-center rounded-full shadow-xl transition-colors hover:text-primary"
+    >
+      <span className="sr-only">Back to top</span>
+      <svg aria-hidden viewBox="0 0 48 48" className="absolute inset-0 -rotate-90">
+        <circle
+          ref={ring}
+          cx="24"
+          cy="24"
+          r={RADIUS}
+          fill="none"
+          stroke="var(--primary)"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray={CIRCUMFERENCE}
+          strokeDashoffset={CIRCUMFERENCE}
+        />
+      </svg>
+      <svg
+        aria-hidden
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="size-5"
+      >
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
   );
 }

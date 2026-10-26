@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
+import { Reveal } from "@/components/site/reveal";
 import { getPublicProject } from "@/lib/queries/public";
 import { siteConfig } from "@/lib/site-config";
 
@@ -48,55 +49,81 @@ export default async function ProjectPage(props: PageProps<"/projects/[id]">) {
 
   return (
     <article className="py-14 sm:py-20">
-      <Link
-        href="/#projects"
-        className="inline-flex h-11 items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-      >
-        ← Back to work
-      </Link>
+      <Reveal start="top 100%" y={20}>
+        <Link
+          data-reveal
+          href="/#projects"
+          className="group inline-flex h-11 items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
+        >
+          <span aria-hidden className="transition-transform duration-300 group-hover:-translate-x-1">
+            ←
+          </span>
+          Back to work
+        </Link>
+      </Reveal>
 
-      <header className="mt-6 space-y-4">
-        <p className="text-sm font-medium uppercase tracking-wide text-primary">
+      <Reveal as="header" start="top 100%" stagger={0.12} className="mt-6 space-y-5">
+        <p
+          data-reveal
+          className="text-sm font-semibold uppercase tracking-[0.22em] text-primary"
+        >
           {project.category}
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1
+          data-reveal
+          className="text-gradient animate-gradient-pan font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+        >
           {project.title}
         </h1>
-        <p className="max-w-prose text-lg text-muted-foreground">
+        <p data-reveal className="max-w-2xl text-lg leading-relaxed text-muted-foreground">
           {project.description}
         </p>
 
         {links.length > 0 ? (
-          <div className="flex flex-wrap gap-3">
-            {links.map((link) => (
+          <div data-reveal className="flex flex-wrap gap-3">
+            {links.map((link, index) => (
               <a
                 key={link.href}
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-11 items-center rounded-lg border border-border px-4 text-sm font-medium transition-colors hover:bg-muted"
+                className={
+                  index === 0
+                    ? "bg-brand-gradient inline-flex h-12 items-center rounded-full px-6 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition-shadow hover:shadow-xl hover:shadow-primary/40"
+                    : "glass inline-flex h-12 items-center rounded-full px-6 text-sm font-semibold transition-colors hover:border-primary/50 hover:text-primary"
+                }
               >
                 {link.label}
               </a>
             ))}
           </div>
         ) : null}
-      </header>
+      </Reveal>
 
-      <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-card border border-border">
-        <Image
-          src={project.cloudinaryImageUrl}
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 1152px) 72rem, 100vw"
-          className="object-cover"
-        />
-      </div>
+      <Reveal start="top 95%" y={48} className="mt-10">
+        <div
+          data-reveal
+          className="relative aspect-[16/9] w-full overflow-hidden rounded-card border border-border shadow-2xl shadow-primary/10"
+        >
+          <Image
+            src={project.cloudinaryImageUrl}
+            alt=""
+            fill
+            priority
+            sizes="(min-width: 1152px) 72rem, 100vw"
+            className="object-cover"
+          />
+        </div>
+      </Reveal>
 
-      <div className="prose prose-neutral mt-10 max-w-none dark:prose-invert">
-        <Markdown remarkPlugins={[remarkGfm]}>{project.contentMarkdown}</Markdown>
-      </div>
+      <Reveal start="top 90%" y={32} className="mt-12">
+        <div
+          data-reveal
+          className="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-display prose-headings:tracking-tight prose-a:text-primary"
+        >
+          <Markdown remarkPlugins={[remarkGfm]}>{project.contentMarkdown}</Markdown>
+        </div>
+      </Reveal>
 
       <footer className="mt-12 pt-6 text-sm text-muted-foreground">
         <Link
